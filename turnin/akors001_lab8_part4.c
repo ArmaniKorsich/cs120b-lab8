@@ -55,7 +55,7 @@ void TimerSet(unsigned long M) {
 enum SM_States {START} state;
 unsigned short x = 0;
 unsigned short MAX = 0b1100000000;
-
+unsigned short MIN = 0b0001000000;
 void ADC_init() {
 	ADCSRA |= (1 << ADEN) | ( 1 << ADSC) | (1 << ADATE);
 }
@@ -64,11 +64,23 @@ void TickFct() {
 	switch(state) {
 		case START:
 			x = ADC;
-			if (x > MAX/2) {
+			if (x <  (MAX / 8)) {
+				PORTB = 0x00;
+			} else if (x < 2*(MAX / 8)) {
 				PORTB = 0x01;
+			} else if (x < 3*(MAX/8)) {
+				PORTB = 0x03;
+			} else if (x < 4*(MAX/8)) {
+				PORTB = 0x07;
+			} else if (x < 5*(MAX/8)) {
+				PORTB = 0x0F;
+			} else if (x < 6*(MAX/8)) {
+				PORTB = 0x1F;
+			} else if (x < 7*(MAX/8)) {
+				PORTB = 0x3F;
 			} else {
-				PORTB = 0x00;	
-			}		
+				PORTB = 0x7F;
+			}
 			break;
 		default:
 			break;
@@ -91,7 +103,7 @@ int main(void) {
     /* Insert your solution below */
     while (1) {
 //        while (!TimerFlag);
-//        TimerFlag = 0;
+//      TimerFlag = 0;
    	TickFct();
 	}
     return 1;    
