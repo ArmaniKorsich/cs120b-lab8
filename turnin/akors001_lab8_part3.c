@@ -102,8 +102,8 @@ int main(void) {
     PORTB = 0x01;
     /* Insert your solution below */
     while (1) {
-        while (!TimerFlag);
-        TimerFlag = 0;
+//        while (!TimerFlag);
+//      TimerFlag = 0;
    	TickFct();
 	}
     return 1;    
